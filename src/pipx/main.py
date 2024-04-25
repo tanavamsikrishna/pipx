@@ -260,6 +260,7 @@ def run_pipx_command(args: argparse.Namespace, subparsers: Dict[str, argparse.Ar
             args.pypackages,
             verbose,
             not args.no_cache,
+            args.print_python_path,
         )
         # We should never reach here because run() is NoReturn.
         return ExitCode(1)
@@ -755,6 +756,7 @@ def _add_run(subparsers: argparse._SubParsersAction, shared_parser: argparse.Arg
         help="Require app to be run from local __pypackages__ directory",
     )
     p.add_argument("--spec", help=SPEC_HELP)
+    p.add_argument("--print-python-path", help="Print the path to the Python executable to be used", action="store_true")
     add_python_options(p)
     add_pip_venv_args(p)
     p.set_defaults(subparser=p)

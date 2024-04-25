@@ -78,6 +78,7 @@ def run_script(
     venv_args: List[str],
     verbose: bool,
     use_cache: bool,
+    print_python_path: bool,
 ) -> NoReturn:
     requirements = _get_requirements_from_script(content)
     if requirements is None:
@@ -102,6 +103,9 @@ def run_script(
             venv.install_unmanaged_packages(requirements, pip_args)
         python_path = venv.python_path
 
+    if print_python_path:
+        print(python_path)
+        sys.exit(0)
     if isinstance(content, Path):
         exec_app([python_path, content, *app_args])
     else:
@@ -185,6 +189,7 @@ def run(
     pypackages: bool,
     verbose: bool,
     use_cache: bool,
+    print_python_path: bool,
 ) -> NoReturn:
     """Installs venv to temporary dir (or reuses cache), then runs app from
     package
@@ -200,7 +205,7 @@ def run(
 
     content = None if spec is not None else maybe_script_content(app, is_path)
     if content is not None:
-        run_script(content, app_args, python, pip_args, venv_args, verbose, use_cache)
+        run_script(content, app_args, python, pip_args, venv_args, verbose, use_cache, print_python_path)
     else:
         package_or_url = spec if spec is not None else app
         run_package(
